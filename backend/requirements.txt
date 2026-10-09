@@ -1,0 +1,21 @@
+# Insura – Backend Dependencies
+# Install with:  pip install -r requirements.txt
+
+# Web framework
+flask==3.0.3
+flask-cors==4.0.1
+
+# Ollama Python client (for Llama 3.2 and embeddings)
+ollama==0.3.3
+
+# Vector database (ChromaDB) + LangChain integration
+chromadb==0.5.3
+langchain-chroma==0.1.2
+langchain-core==0.2.38
+
+# Text-to-speech
+edge-tts==6.1.12
+
+# Data handling (enrollment + policy loading)
+pandas==2.2.2
+openpyxl==3.1.5

@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Insura – Customer Dashboard</title>
+  <link rel="stylesheet" href="/static/dashboard.css" />
+</head>
+
+<body>
+
+<!-- =========================================================================
+     LAYOUT SHELL
+========================================================================== -->
+<div class="dash-shell">
+
+  <!-- =====================================================================
+       SIDEBAR
+  ====================================================================== -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <div class="logo-icon">🛡️</div>
+      <div>
+        <div class="logo-text">INSURA</div>
+        <div class="logo-sub">Customer Portal</div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav" aria-label="Dashboard navigation">
+
+      <div class="nav-section-label">Main</div>
+
+      <div class="nav-item active" data-panel="overview" role="button" tabindex="0"
+           aria-label="Overview">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Overview</span>
+      </div>
+
+      <div class="nav-item" data-panel="profile" role="button" tabindex="0"
+           aria-label="My Profile">
+        <span class="nav-icon">👤</span>
+        <span class="nav-label">My Profile</span>
+      </div>
+
+      <div class="nav-section-label">Insurance</div>
+
+      <div class="nav-item" data-panel="policies" role="button" tabindex="0"
+           aria-label="My Policies">
+        <span class="nav-icon">📋</span>
+        <span class="nav-label">My Policies</span>
+      </div>
+
+      <div class="nav-item" data-panel="recommendations" role="button" tabindex="0"
+           aria-label="AI Recommendations">
+        <span class="nav-icon">🤖</span>
+        <span class="nav-label">Recommendations</span>
+      </div>
+
+      <div class="nav-section-label">Activity</div>
+
+      <div class="nav-item" data-panel="chat-history" role="button" tabindex="0"
+           aria-label="Chat History">
+        <span class="nav-icon">💬</span>
+        <span class="nav-label">Chat History</span>
+      </div>
+
+      <div class="nav-item" data-panel="documents" role="button" tabindex="0"
+           aria-label="Documents">
+        <span class="nav-icon">📁</span>
+        <span class="nav-label">Documents</span>
+      </div>
+
+      <div class="nav-item" data-panel="notifications" role="button" tabindex="0"
+           aria-label="Notifications">
+        <span class="nav-icon">🔔</span>
+        <span class="nav-label">Notifications</span>
+        <span class="nav-badge" id="notif-sidebar-badge" style="display:none">0</span>
+      </div>
+
+      <div class="nav-section-label">Tools</div>
+
+      <div class="nav-item" data-panel="calculators" role="button" tabindex="0"
+           aria-label="Calculators">
+        <span class="nav-icon">🧮</span>
+        <span class="nav-label">Calculators</span>
+      </div>
+
+    </nav>
+
+    <!-- Sidebar footer -->
+    <div class="sidebar-footer">
+      <div class="nav-item" onclick="window.location.href='/'"
+           role="button" tabindex="0" aria-label="AI Agent">
+        <span class="nav-icon">🎙️</span>
+        <span class="nav-label">AI Agent</span>
+      </div>
+      <div class="nav-item" onclick="logout()"
+           role="button" tabindex="0" aria-label="Logout">
+        <span class="nav-icon">🚪</span>
+        <span class="nav-label">Logout</span>
+      </div>
+    </div>
+
+  </aside><!-- /sidebar -->
+
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
+
+  <!-- =====================================================================
+       MAIN AREA
+  ====================================================================== -->
+  <div class="main-area">
+
+    <!-- Top bar -->
+    <header class="topbar" role="banner">
+      <button class="topbar-toggle" id="sidebarToggle"
+              aria-label="Open sidebar">☰</button>
+
+      <!-- Search -->
+      <div class="topbar-search" role="search">
+        <span class="search-icon" aria-hidden="true">🔍</span>
+        <input type="search" id="topbarSearch"
+               placeholder="Search policies, chats…"
+               aria-label="Search dashboard" />
+      </div>
+
+      <div class="topbar-spacer"></div>
+
+      <div class="topbar-actions">
+        <!-- Notification bell -->
+        <button class="topbar-btn" id="btnNotifBell"
+                aria-label="Notifications">
+          🔔
+          <span class="btn-badge" id="notif-topbar-badge"
+                style="display:none">0</span>
+        </button>
+
+        <!-- AI Agent quick link -->
+        <button class="topbar-btn"
+                onclick="window.location.href='/'"
+                aria-label="Open AI Agent">🎙️</button>
+
+        <!-- User pill -->
+        <div class="topbar-user" onclick="navigateTo('profile')"
+             role="button" tabindex="0" aria-label="My profile">
+          <div class="user-avatar" aria-hidden="true">👤</div>
+          <span class="user-name" id="topbarUsername"></span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================================================================
+         PAGE CONTENT  (all panels live here)
+    ==================================================================== -->
+    <main class="page-content" role="main">
+
+      <!-- ─────────────────────────────────────────────────────────────────
+           PANEL: Overview
+      ────────────────────────────────────────────────────────────────── -->
+      <section class="panel active" id="panel-overview"
+               aria-labelledby="overview-heading">
+
+        <div class="panel-header">
+          <div>
+            <h1 class="panel-title" id="overview-heading">
+              <span id="overview-greeting">Welcome!</span>
+            </h1>
+            <p class="panel-subtitle" id="overview-sub">
+              Loading your dashboard…
+            </p>
+          </div>
+          <button class="btn btn-primary"
+                  onclick="window.location.href='/'">
+            🎙️ Talk to Agent
+          </button>
+        </div>
+
+        <!-- Stat cards -->
+        <div class="stats-grid" role="list">
+
+          <div class="stat-card" role="listitem">
+            <div class="stat-icon blue" aria-hidden="true">📋</div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-total-policies">—</div>
+              <div class="stat-label">Total Policies</div>
+            </div>
+          </div>
+
+          <div class="stat-card" role="listitem">
+            <div class="stat-icon green" aria-hidden="true">✅</div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-active-policies">—</div>
+              <div class="stat-label">Active Policies</div>
+            </div>
+          </div>
+
+          <div class="stat-card" role="listitem">
+            <div class="stat-icon orange" aria-hidden="true">💰</div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-premium-due">—</div>
+              <div class="stat-label">Premiums Due Soon</div>
+            </div>
+          </div>
+
+          <div class="stat-card" role="listitem">
+            <div class="stat-icon purple" aria-hidden="true">🤖</div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-recommendations">—</div>
+              <div class="stat-label">AI Recommendations</div>
+            </div>
+          </div>
+
+          <div class="stat-card" role="listitem">
+            <div class="stat-icon red" aria-hidden="true">🔔</div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-unread-notifs">—</div>
+              <div class="stat-label">Unread Alerts</div>
+            </div>
+          </div>
+
+          <div class="stat-card" role="listitem">
+            <div class="stat-icon blue" aria-hidden="true">💬</div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-chat-count">—</div>
+              <div class="stat-label">Chat Messages</div>
+            </div>
+          </div>
+
+        </div><!-- /stats-grid -->
+
+        <!-- Quick action cards -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:4px">
+
+          <div class="card" style="cursor:pointer" onclick="navigateTo('policies')">
+            <div class="card-body" style="display:flex;align-items:center;gap:14px">
+              <div class="stat-icon blue" style="flex-shrink:0">📋</div>
+              <div>
+                <div style="font-weight:700;font-size:.92rem">View My Policies</div>
+                <div style="font-size:.8rem;color:var(--text-muted);margin-top:2px">
+                  Premium details &amp; status
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="cursor:pointer" onclick="navigateTo('recommendations')">
+            <div class="card-body" style="display:flex;align-items:center;gap:14px">
+              <div class="stat-icon purple" style="flex-shrink:0">🤖</div>
+              <div>
+                <div style="font-weight:700;font-size:.92rem">AI Recommendations</div>
+                <div style="font-size:.8rem;color:var(--text-muted);margin-top:2px">
+                  Personalised policy picks
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="cursor:pointer" onclick="navigateTo('chat-history')">
+            <div class="card-body" style="display:flex;align-items:center;gap:14px">
+              <div class="stat-icon blue" style="flex-shrink:0">💬</div>
+              <div>
+                <div style="font-weight:700;font-size:.92rem">Chat History</div>
+                <div style="font-size:.8rem;color:var(--text-muted);margin-top:2px">
+                  Review past conversations
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="cursor:pointer" onclick="navigateTo('notifications')">
+            <div class="card-body" style="display:flex;align-items:center;gap:14px">
+              <div class="stat-icon orange" style="flex-shrink:0">🔔</div>
+              <div>
+                <div style="font-weight:700;font-size:.92rem">Notifications</div>
+                <div style="font-size:.8rem;color:var(--text-muted);margin-top:2px">
+                  Reminders &amp; updates
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section><!-- /panel-overview -->
+
+
+      <!-- ─────────────────────────────────────────────────────────────────
+           PANEL: Profile
+      ────────────────────────────────────────────────────────────────── -->
+      <section class="panel" id="panel-profile"
+               aria-labelledby="profile-heading">
+
+        <div class="panel-header">
+          <div>
+            <h1 class="panel-title" id="profile-heading">My Profile</h1>
+            <p class="panel-subtitle">View and update your personal details</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <!-- Profile hero banner -->
+          <div class="profile-hero">
+            <div class="profile-avatar-lg" aria-hidden="true">👤</div>
+            <div>
+              <div class="profile-hero-name" id="profile-display-name">—</div>
+              <div class="profile-hero-sub"  id="profile-display-username">—</div>
+            </div>
+          </div>
+
+          <!-- Form -->
+          <div class="card-body">
+            <div class="form-grid">
+
+              <div class="form-group">
+                <label class="form-label" for="profile-name">Full Name</label>
+                <input class="form-input" type="text" id="profile-name"
+                       placeholder="Your full name" readonly />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="profile-age">Age</label>
+                <input class="form-input" type="text" id="profile-age"
+                       placeholder="Your age" readonly />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="profile-phone">Phone Number</label>
+                <input class="form-input" type="tel" id="profile-phone"
+                       placeholder="Your phone number" readonly />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="profile-email">Email Address</label>
+                <input class="form-input" type="email" id="profile-email"
+                       placeholder="Your email address" readonly />
+              </div>
+
+            </div><!-- /form-grid -->
+
+            <!-- Action buttons -->
+            <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
+              <button class="btn btn-primary" id="btn-profile-edit"
+                      onclick="profileEditMode()" aria-label="Edit profile">
+                ✏️ Edit Profile
+              </button>
+              <button class="btn btn-primary" id="btn-profile-save"
+                      onclick="profileSave()" style="display:none"
+                      aria-label="Save profile">
+                💾 Save Changes
+              </button>
+              <button class="btn btn-outline" id="btn-profile-cancel"
+                      onclick="profileCancelEdit()" style="display:none"
+                      aria-label="Cancel editing">
+                Cancel
+              </button>
+            </div>
+
+          </div><!-- /card-body -->
+        </div><!-- /card -->
+
+      </section><!-- /panel-profile -->
+
+
+      <!-- ─────────────────────────────────────────────────────────────────
+           PANEL: Policies
+      ────────────────────────────────────────────────────────────────── -->
+      <section class="panel" id="panel-policies"
+               aria-labelledby="policies-heading">
+
+        <div class="panel-header">
+          <div>
+            <h1 class="panel-title" id="policies-heading">My Policies</h1>
+            <p class="panel-subtitle">All your enrolled insurance policies</p>
+          </div>
+          <button class="btn btn-primary"
+                  onclick="window.location.href='/'">
+            + Enroll New Policy
+          </button>
+        </div>
+
+        <div class="card">
+          <!-- Search bar -->
+          <div class="table-search-bar">
+            <input type="search" placeholder="Search by policy name, number or status…"
+                   oninput="searchPolicies(this.value)"
+                   aria-label="Search policies" />
+          </div>
+
+          <!-- Table -->
+          <div class="table-wrapper">
+            <table role="grid" aria-label="Enrolled policies">
+              <thead id="policies-thead">
+                <tr>
+                  <th data-col="policy_number"
+                      onclick="sortPolicies('policy_number')">Policy No.</th>
+                  <th data-col="policy_name"
+                      onclick="sortPolicies('policy_name')">Policy Name</th>
+                  <th data-col="enrollment_date"
+                      onclick="sortPolicies('enrollment_date')">Enrolled On</th>
+                  <th data-col="status"
+                      onclick="sortPolicies('status')">Status</th>
+                  <th data-col="min_sum_assured"
+                      onclick="sortPolicies('min_sum_assured')">Min. Sum Assured</th>
+                  <th data-col="payment_frequency"
+                      onclick="sortPolicies('payment_frequency')">Premium Frequency</th>
+                  <th data-col="next_due_date"
+                      onclick="sortPolicies('next_due_date')">Next Due</th>
+                </tr>
+              </thead>
+              <tbody id="policies-tbody">
+                <tr class="loading-row">
+                  <td colspan="7">
+                    <div class="spinner"></div> Loading…
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div><!-- /card -->
+
+      </section><!-- /panel-policies -->
+
+
+      <!-- ─────────────────────────────────────────────────────────────────
+           PANEL: Recommendations
+      ────────────────────────────────────────────────────────────────── -->
+      <section class="panel" id="panel-recommendations"
+               aria-labelledby="rec-heading">
+
+        <div class="panel-header">
+          <div>
+            <h1 class="panel-title" id="rec-heading">AI Recommendations</h1>
+            <p class="panel-subtitle">
+              Policies recommended by Insura based on your conversations
+            </p>
+          </div>
+          <button class="btn btn-outline"
+                  onclick="loadRecommendations()"
+                  aria-label="Refresh recommendations">
+            🔄 Refresh
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="rec-grid" id="rec-grid">
+            <div style="padding:20px"><div class="spinner"></div></div>
+          </div>
+        </div>
+
+      </section><!-- /panel-recommendations -->
+
+
+      <!-- ─────────────────────────────────────────────────────────────────
+           PANEL: Chat History
+      ────────────────────────────────────────────────────────────────── -->
+      <section class="panel" id="panel-chat-history"
+               aria-labelledby="chat-heading">
+
+        <div class="panel-header">
+          <div>
+            <h1 class="panel-title" id="chat-heading">Chat History</h1>
+            <p class="panel-subtitle">Your previous conversations with Insura</p>
+          </div>
+          <button class="btn btn-primary"
+                  onclick="window.location.href='/'">
+            🎙️ New Conversation
+          </button>
+        </div>
+
+        <div class="card">
+          <!-- Search bar -->
+          <div class="table-search-bar">
+            <input type="search" id="chatSearchInput"
+                   placeholder="Search your conversation history…"
+                   oninput="chatHistorySearch(this.value)"
+                   aria-label="Search chat history" />
+          </div>
+
+          <!-- Conversation turns -->
+          <div id="chat-history-container">
+            <div class="empty-state">
+              <div class="spinner"></div>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div class="pagination" id="chat-pagination"></div>
+
+        </div><!-- /card -->
+
+      </section><!-- /panel-chat-history -->
+
+
+      <!-- ─────────────────────────────────────────────────────────────────
+           PANEL: Documents
+      ────────────────────────────────────────────────────────────────── -->
+      <section class="panel" id="panel-documents"
+               aria-labelledby="docs-heading">
+
+        <div class="panel-header">
+          <div>
+            <h1 class="panel-title" id="docs-heading">Documents</h1>
+            <p class="panel-subtitle">Your policy documents and certificates</p>
+          </div>
+          <button class="btn btn-outline"
+                  onclick="loadDocuments()"
+                  aria-label="Refresh documents">
+            🔄 Refresh
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="doc-grid" id="doc-grid">
+            <div style="padding:20px"><div class="spinner"></div></div>
+          </div>
+        </div>
+
+      </section><!-- /panel-documents -->
+
+
+      <!-- ─────────────────────────────────────────────────────────────────
+           PANEL: Notifications
+      ────────────────────────────────────────────────────────────────── -->
+      <section class="panel" id="panel-notifications"
+               aria-labelledby="notif-heading">
+
+        <div class="panel-header">
+          <div>
+            <h1 class="panel-title" id="notif-heading">Notifications</h1>
+            <p class="panel-subtitle" id="notif-unread-count">Loading…</p>
+          </div>
+          <button class="btn btn-outline"
+                  onclick="markAllNotifRead()"
+                  aria-label="Mark all notifications as read">
+            ✅ Mark All Read
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="notif-list" id="notif-list">
+            <div class="empty-state">
+              <div class="spinner"></div>
+            </div>
+          </div>
+        </div>
+
+      </section><!-- /panel-notifications -->
+
+
+      <!-- ─────────────────────────────────────────────────────────────────
+           PANEL: Calculators
+      ────────────────────────────────────────────────────────────────── -->
+      <section class="panel" id="panel-calculators" aria-labelledby="calc-heading">
+
+        <div class="panel-header">
+          <div>
+            <h1 class="panel-title" id="calc-heading">Insurance Calculators</h1>
+            <p class="panel-subtitle">Estimate premiums, maturity, surrender values and more</p>
+          </div>
+        </div>
+
+        <!-- Calculator tab bar -->
+        <div class="calc-tabs" role="tablist" aria-label="Calculator types">
+          <button class="calc-tab active" data-calc="premium"   onclick="switchCalc('premium')"   role="tab">💰 Premium Calculator</button>
+          <button class="calc-tab"         data-calc="maturity"  onclick="switchCalc('maturity')"  role="tab">📈 Maturity Calculator</button>
+          <button class="calc-tab"         data-calc="surrender" onclick="switchCalc('surrender')" role="tab">🔄 Surrender Calculator</button>
+          <button class="calc-tab"         data-calc="sip"       onclick="switchCalc('sip')"       role="tab">📊 SIP Calculator</button>
+          <button class="calc-tab"         data-calc="fd"        onclick="switchCalc('fd')"        role="tab">🏦 FD Calculator</button>
+        </div>
+
+        <!-- ── PREMIUM CALCULATOR ── -->
+        <div class="calc-pane active" id="calc-premium">
+          <div class="card">
+            <div class="calc-layout">
+              <!-- Inputs -->
+              <div class="calc-inputs">
+                <h2 class="calc-title">LIC Premium Calculator</h2>
+                <p class="calc-subtitle">Smart estimate based on age, plan, and smoking status.</p>
+
+                <div class="calc-field">
+                  <label class="calc-label">Plan Type</label>
+                  <select class="calc-select" id="prem-plan" oninput="calcPremium()">
+                    <option value="endowment">Endowment Plans</option>
+                    <option value="wholelife">Whole Life Plans</option>
+                    <option value="moneyback">Money Back Plans</option>
+                    <option value="term">Term Assurance Plans</option>
+                  </select>
+                </div>
+
+                <div class="calc-row">
+                  <div class="calc-field">
+                    <label class="calc-label">Age (1–100 Years)</label>
+                    <div class="calc-input-icon">
+                      <span>👤</span>
+                      <input class="calc-input" type="number" id="prem-age"
+                             value="30" min="1" max="100" oninput="calcPremium()" />
+                      <span class="calc-unit">Years</span>
+                    </div>
+                  </div>
+                  <div class="calc-field">
+                    <label class="calc-label">Gender</label>
+                    <div class="calc-radio-group">
+                      <label><input type="radio" name="prem-gender" value="male" checked onchange="calcPremium()" /> Male</label>
+                      <label><input type="radio" name="prem-gender" value="female" onchange="calcPremium()" /> Female</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="calc-row">
+                  <div class="calc-field">
+                    <label class="calc-label">Smoking Status</label>
+                    <div class="calc-radio-group">
+                      <label><input type="radio" name="prem-smoke" value="no" checked onchange="calcPremium()" /> Non-Smoker</label>
+                      <label><input type="radio" name="prem-smoke" value="yes" onchange="calcPremium()" /> Smoker</label>
+                    </div>
+                  </div>
+                  <div class="calc-field">
+                    <label class="calc-label">Policy Term (5–45 Yrs)</label>
+                    <div class="calc-slider-row">
+                      <input class="calc-slider" type="range" id="prem-term"
+                             min="5" max="45" value="20" oninput="calcPremium(); document.getElementById('prem-term-val').textContent=this.value+' Yrs'" />
+                      <span class="calc-slider-val" id="prem-term-val">20 Yrs</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="calc-field">
+                  <label class="calc-label">Sum Assured (₹)</label>
+                  <div class="calc-input-icon">
+                    <span>₹</span>
+                    <input class="calc-input" type="number" id="prem-sum"
+                           value="500000" min="100000" step="50000" oninput="calcPremium()" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Results -->
+              <div class="calc-results" id="prem-results">
+                <div class="calc-results-header">Estimated Premiums (inc. 4.5% GST)</div>
+                <div class="calc-result-main">
+                  <div class="calc-result-label">Annual Premium</div>
+                  <div class="calc-result-value" id="prem-annual">₹0</div>
+                </div>
+                <div class="calc-result-grid">
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Half-Yearly</div>
+                    <div class="calc-result-value sm" id="prem-half">₹0</div>
+                  </div>
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Quarterly</div>
+                    <div class="calc-result-value sm" id="prem-quarterly">₹0</div>
+                  </div>
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Monthly (NACH)</div>
+                    <div class="calc-result-value sm" id="prem-monthly">₹0</div>
+                  </div>
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Per Day Approx</div>
+                    <div class="calc-result-value sm" id="prem-daily">₹0</div>
+                  </div>
+                </div>
+                <div class="calc-disclaimer">
+                  <strong>Disclaimer:</strong> This LIC Calculator gives a generic estimation.
+                  Exact premium depends on official LIC tabular rates and underwriting rules.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /calc-premium -->
+
+        <!-- ── MATURITY CALCULATOR ── -->
+        <div class="calc-pane" id="calc-maturity">
+          <div class="card">
+            <div class="calc-layout">
+              <div class="calc-inputs">
+                <h2 class="calc-title">LIC Maturity Calculator</h2>
+                <p class="calc-subtitle">Estimate the maturity amount at the end of your policy term.</p>
+
+                <div class="calc-field">
+                  <label class="calc-label">Sum Assured (₹)</label>
+                  <div class="calc-input-icon"><span>₹</span>
+                    <input class="calc-input" type="number" id="mat-sum" value="500000" min="100000" step="50000" oninput="calcMaturity()" />
+                  </div>
+                </div>
+                <div class="calc-field">
+                  <label class="calc-label">Policy Term (Years)</label>
+                  <div class="calc-slider-row">
+                    <input class="calc-slider" type="range" id="mat-term" min="5" max="40" value="20"
+                           oninput="calcMaturity(); document.getElementById('mat-term-val').textContent=this.value+' Yrs'" />
+                    <span class="calc-slider-val" id="mat-term-val">20 Yrs</span>
+                  </div>
+                </div>
+                <div class="calc-field">
+                  <label class="calc-label">Bonus Rate (₹ per ₹1000 SA / year)</label>
+                  <div class="calc-input-icon"><span>₹</span>
+                    <input class="calc-input" type="number" id="mat-bonus" value="45" min="20" max="80" oninput="calcMaturity()" />
+                  </div>
+                </div>
+                <div class="calc-field">
+                  <label class="calc-label">Final Addition Bonus (₹ per ₹1000 SA)</label>
+                  <div class="calc-input-icon"><span>₹</span>
+                    <input class="calc-input" type="number" id="mat-fab" value="600" min="0" oninput="calcMaturity()" />
+                  </div>
+                </div>
+              </div>
+              <div class="calc-results" id="mat-results">
+                <div class="calc-results-header">Estimated Maturity Amount</div>
+                <div class="calc-result-main">
+                  <div class="calc-result-label">Total Maturity Value</div>
+                  <div class="calc-result-value" id="mat-total">₹0</div>
+                </div>
+                <div class="calc-result-grid">
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Sum Assured</div>
+                    <div class="calc-result-value sm" id="mat-sa">₹0</div>
+                  </div>
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Total Bonus</div>
+                    <div class="calc-result-value sm" id="mat-bonus-out">₹0</div>
+                  </div>
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Final Addition</div>
+                    <div class="calc-result-value sm" id="mat-fab-out">₹0</div>
+                  </div>
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Profit on Investment</div>
+                    <div class="calc-result-value sm" id="mat-profit">—</div>
+                  </div>
+                </div>
+                <div class="calc-disclaimer">
+                  <strong>Disclaimer:</strong> Bonus rates are illustrative. Actual rates declared annually by LIC.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /calc-maturity -->
+
+        <!-- ── SURRENDER CALCULATOR ── -->
+        <div class="calc-pane" id="calc-surrender">
+          <div class="card">
+            <div class="calc-layout">
+              <div class="calc-inputs">
+                <h2 class="calc-title">LIC Surrender Value Calculator</h2>
+                <p class="calc-subtitle">Estimate the surrender value if you exit the policy early.</p>
+
+                <div class="calc-field">
+                  <label class="calc-label">Sum Assured (₹)</label>
+                  <div class="calc-input-icon"><span>₹</span>
+                    <input class="calc-input" type="number" id="sur-sum" value="500000" min="100000" step="50000" oninput="calcSurrender()" />
+                  </div>
+                </div>
+                <div class="calc-field">
+                  <label class="calc-label">Policy Term (Years)</label>
+                  <div class="calc-slider-row">
+                    <input class="calc-slider" type="range" id="sur-term" min="5" max="40" value="20"
+                           oninput="calcSurrender(); document.getElementById('sur-term-val').textContent=this.value+' Yrs'" />
+                    <span class="calc-slider-val" id="sur-term-val">20 Yrs</span>
+                  </div>
+                </div>
+                <div class="calc-field">
+                  <label class="calc-label">Years Premiums Paid</label>
+                  <div class="calc-slider-row">
+                    <input class="calc-slider" type="range" id="sur-paid" min="3" max="40" value="5"
+                           oninput="calcSurrender(); document.getElementById('sur-paid-val').textContent=this.value+' Yrs'" />
+                    <span class="calc-slider-val" id="sur-paid-val">5 Yrs</span>
+                  </div>
+                </div>
+                <div class="calc-field">
+                  <label class="calc-label">Annual Premium (₹)</label>
+                  <div class="calc-input-icon"><span>₹</span>
+                    <input class="calc-input" type="number" id="sur-prem" value="25000" min="1000" step="1000" oninput="calcSurrender()" />
+                  </div>
+                </div>
+              </div>
+              <div class="calc-results">
+                <div class="calc-results-header">Estimated Surrender Value</div>
+                <div class="calc-result-main">
+                  <div class="calc-result-label">Surrender Value</div>
+                  <div class="calc-result-value" id="sur-value">₹0</div>
+                </div>
+                <div class="calc-result-grid">
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Total Premiums Paid</div>
+                    <div class="calc-result-value sm" id="sur-total-paid">₹0</div>
+                  </div>
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Surrender Factor</div>
+                    <div class="calc-result-value sm" id="sur-factor">0%</div>
+                  </div>
+                </div>
+                <div class="calc-disclaimer">
+                  <strong>Disclaimer:</strong> Surrender value depends on policy type and LIC guidelines. Min 3 years premiums must be paid.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /calc-surrender -->
+
+        <!-- ── SIP CALCULATOR ── -->
+        <div class="calc-pane" id="calc-sip">
+          <div class="card">
+            <div class="calc-layout">
+              <div class="calc-inputs">
+                <h2 class="calc-title">SIP Calculator</h2>
+                <p class="calc-subtitle">Systematic Investment Plan — estimate your wealth creation.</p>
+
+                <div class="calc-field">
+                  <label class="calc-label">Monthly Investment (₹)</label>
+                  <div class="calc-input-icon"><span>₹</span>
+                    <input class="calc-input" type="number" id="sip-amount" value="5000" min="500" step="500" oninput="calcSIP()" />
+                  </div>
+                </div>
+                <div class="calc-field">
+                  <label class="calc-label">Expected Annual Return (%)</label>
+                  <div class="calc-slider-row">
+                    <input class="calc-slider" type="range" id="sip-rate" min="1" max="30" value="12"
+                           oninput="calcSIP(); document.getElementById('sip-rate-val').textContent=this.value+'%'" />
+                    <span class="calc-slider-val" id="sip-rate-val">12%</span>
+                  </div>
+                </div>
+                <div class="calc-field">
+                  <label class="calc-label">Investment Duration (Years)</label>
+                  <div class="calc-slider-row">
+                    <input class="calc-slider" type="range" id="sip-years" min="1" max="40" value="10"
+                           oninput="calcSIP(); document.getElementById('sip-years-val').textContent=this.value+' Yrs'" />
+                    <span class="calc-slider-val" id="sip-years-val">10 Yrs</span>
+                  </div>
+                </div>
+              </div>
+              <div class="calc-results">
+                <div class="calc-results-header">SIP Returns Estimate</div>
+                <div class="calc-result-main">
+                  <div class="calc-result-label">Total Wealth Gained</div>
+                  <div class="calc-result-value" id="sip-wealth">₹0</div>
+                </div>
+                <div class="calc-result-grid">
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Invested Amount</div>
+                    <div class="calc-result-value sm" id="sip-invested">₹0</div>
+                  </div>
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Est. Returns</div>
+                    <div class="calc-result-value sm" id="sip-returns">₹0</div>
+                  </div>
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Total Value</div>
+                    <div class="calc-result-value sm" id="sip-total">₹0</div>
+                  </div>
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Return %</div>
+                    <div class="calc-result-value sm" id="sip-pct">0%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /calc-sip -->
+
+        <!-- ── FD CALCULATOR ── -->
+        <div class="calc-pane" id="calc-fd">
+          <div class="card">
+            <div class="calc-layout">
+              <div class="calc-inputs">
+                <h2 class="calc-title">FD Calculator</h2>
+                <p class="calc-subtitle">Fixed Deposit — estimate your maturity amount and interest earned.</p>
+
+                <div class="calc-field">
+                  <label class="calc-label">Principal Amount (₹)</label>
+                  <div class="calc-input-icon"><span>₹</span>
+                    <input class="calc-input" type="number" id="fd-principal" value="100000" min="1000" step="1000" oninput="calcFD()" />
+                  </div>
+                </div>
+                <div class="calc-field">
+                  <label class="calc-label">Annual Interest Rate (%)</label>
+                  <div class="calc-slider-row">
+                    <input class="calc-slider" type="range" id="fd-rate" min="1" max="15" step="0.25" value="7"
+                           oninput="calcFD(); document.getElementById('fd-rate-val').textContent=parseFloat(this.value).toFixed(2)+'%'" />
+                    <span class="calc-slider-val" id="fd-rate-val">7.00%</span>
+                  </div>
+                </div>
+                <div class="calc-field">
+                  <label class="calc-label">Duration (Years)</label>
+                  <div class="calc-slider-row">
+                    <input class="calc-slider" type="range" id="fd-years" min="1" max="10" value="5"
+                           oninput="calcFD(); document.getElementById('fd-years-val').textContent=this.value+' Yrs'" />
+                    <span class="calc-slider-val" id="fd-years-val">5 Yrs</span>
+                  </div>
+                </div>
+                <div class="calc-field">
+                  <label class="calc-label">Compounding Frequency</label>
+                  <select class="calc-select" id="fd-freq" oninput="calcFD()">
+                    <option value="1">Annually</option>
+                    <option value="2">Half-Yearly</option>
+                    <option value="4" selected>Quarterly</option>
+                    <option value="12">Monthly</option>
+                  </select>
+                </div>
+              </div>
+              <div class="calc-results">
+                <div class="calc-results-header">FD Maturity Estimate</div>
+                <div class="calc-result-main">
+                  <div class="calc-result-label">Maturity Amount</div>
+                  <div class="calc-result-value" id="fd-maturity">₹0</div>
+                </div>
+                <div class="calc-result-grid">
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Principal</div>
+                    <div class="calc-result-value sm" id="fd-principal-out">₹0</div>
+                  </div>
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Interest Earned</div>
+                    <div class="calc-result-value sm" id="fd-interest">₹0</div>
+                  </div>
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Effective Annual Rate</div>
+                    <div class="calc-result-value sm" id="fd-ear">0%</div>
+                  </div>
+                  <div class="calc-result-box">
+                    <div class="calc-result-label">Growth</div>
+                    <div class="calc-result-value sm" id="fd-growth">0%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- /calc-fd -->
+
+      </section><!-- /panel-calculators -->
+
+
+    </main><!-- /page-content -->
+  </div><!-- /main-area -->
+</div><!-- /dash-shell -->
+
+
+<!-- =========================================================================
+     TOAST CONTAINER
+========================================================================== -->
+<div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+
+<!-- =========================================================================
+     SCRIPTS
+========================================================================== -->
+<script src="/static/dashboard.js"></script>
+
+</body>
+</html>
