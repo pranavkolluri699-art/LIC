@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="950" height="900" viewBox="0 0 950 900" role="img" aria-labelledby="title desc">
+<title id="title">INSURA enrollment activity diagram</title><desc id="desc">Enrollment starts from a chat trigger, collects customer details, and saves enrollment data.</desc>
+<defs><style>.bg{fill:#f8fafc}.step{fill:#eff6ff;stroke:#2563eb;stroke-width:2}.decision{fill:#fff7ed;stroke:#ea580c;stroke-width:2}.line{stroke:#475569;stroke-width:2;fill:none;marker-end:url(#a)}.t{font:18px Arial;fill:#172554}.h{font:bold 26px Arial;fill:#0f172a}.small{font:15px Arial;fill:#475569}</style><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 8 4 0 8" fill="#475569"/></marker></defs>
+<rect class="bg" width="950" height="900"/><text class="h" x="475" y="45" text-anchor="middle">INSURA — Enrollment Activity</text>
+<circle cx="475" cy="95" r="15" fill="#172554"/><rect class="step" x="300" y="135" width="350" height="65" rx="28"/><text class="t" x="475" y="175" text-anchor="middle">Customer sends chat message</text>
+<path class="line" d="M475 110v25M475 200v35"/><path class="decision" d="m475 235 120 65-120 65-120-65z"/><text class="t" x="475" y="294" text-anchor="middle">Enrollment intent?</text><text class="small" x="610" y="288">No</text>
+<path class="line" d="M595 300h210v500"/><rect class="step" x="695" y="450" width="200" height="70" rx="24"/><text class="t" x="795" y="480" text-anchor="middle">Continue policy</text><text class="t" x="795" y="503" text-anchor="middle">question flow</text>
+<text class="small" x="495" y="390">Yes</text><path class="line" d="M475 365v36"/><rect class="step" x="300" y="400" width="350" height="65" rx="24"/><text class="t" x="475" y="440" text-anchor="middle">Resolve policy and start session</text>
+<path class="line" d="M475 465v30"/><rect class="step" x="300" y="495" width="350" height="65" rx="24"/><text class="t" x="475" y="535" text-anchor="middle">Collect full name</text>
+<path class="line" d="M475 560v25"/><rect class="step" x="300" y="585" width="350" height="65" rx="24"/><text class="t" x="475" y="625" text-anchor="middle">Collect age, phone, and email</text>
+<path class="line" d="M475 650v28"/><rect class="step" x="300" y="678" width="350" height="65" rx="24"/><text class="t" x="475" y="718" text-anchor="middle">Save enrollment workbook</text>
+<path class="line" d="M475 743v30"/><path class="decision" d="m475 773 125 60-125 60-125-60z"/><text class="t" x="475" y="827" text-anchor="middle">Username present?</text>
+<text class="small" x="615" y="823">Yes: sync SQLite</text><text class="small" x="615" y="850">No: skip dashboard sync</text>
+</svg>
