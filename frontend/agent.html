@@ -916,7 +916,7 @@
         _sendAudioToAvatar(filename).then(accepted => {
           // Wav2Lip needs about 0.44s to emit its first speaking frame.
           // Queue the avatar audio first, then start local playback to align them.
-          const leadMs = accepted && _avatarSessionId === sessionId ? 400 : 0;
+          const leadMs = accepted && _avatarSessionId === sessionId ? 550 : 0;
           window.setTimeout(startPlayback, leadMs);
         });
       } else {
