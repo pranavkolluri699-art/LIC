@@ -41,7 +41,7 @@
     /* ---- Header -------------------------------------------------------- */
     .header {
       width: 100%;
-      max-width: 780px;
+      max-width: 1320px;
       display: flex;
       align-items: center;
       gap: 14px;
@@ -73,18 +73,59 @@
       color: var(--text-muted);
     }
 
-    /* ---- Main card ----------------------------------------------------- */
+/* ---- Main card and two-column workspace --------------------------- */
     .card {
       width: 100%;
-      max-width: 780px;
+      max-width: 1320px;
       background: var(--surface);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
       overflow: hidden;
     }
 
+    .workspace-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(270px, 31%);
+      align-items: stretch;
+      gap: 16px;
+      min-height: 612px;
+      padding: 16px;
+      background: var(--bg);
+    }
+
+    .conversation-column {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 580px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    }
+
+    /* ---- Real-time digital avatar ------------------------------------- */
+    .avatar-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      gap: 14px;
+      min-width: 0;
+      min-height: 580px;
+      padding: 20px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      box-shadow: 0 2px 10px rgba(0,0,0,.05);
+    }
+    .avatar-toolbar { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+    .avatar-caption { color: var(--text-muted); font-size: .82rem; text-align: center; }
+    .avatar-connect-btn { border: 0; border-radius: 8px; padding: 8px 12px; color: #fff; background: var(--brand); cursor: pointer; font-size: .82rem; }
+    .avatar-connect-btn:hover { background: var(--brand-dark); }
+    .avatar-video { display: none; width: min(100%, 360px); aspect-ratio: 1; max-height: 380px; margin: 0 auto; background: #111827; border-radius: 12px; object-fit: contain; }
+    .avatar-video.visible { display: block; }
     /* ---- Status bar ---------------------------------------------------- */
     .status-bar {
       padding: 10px 20px;
@@ -97,6 +138,48 @@
       gap: 8px;
       letter-spacing: .02em;
       min-height: 40px;
+    }
+
+    .query-timer {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-left: 6px;
+      padding: 4px 8px;
+      border: 1px solid rgba(15, 23, 42, .12);
+      border-radius: 999px;
+      background: rgba(255,255,255,.7);
+      color: var(--text-muted);
+      font-size: .72rem;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      visibility: hidden;
+    }
+
+    .query-timer[data-running="true"] { visibility: visible; }
+
+    .query-timer .timer-indicator {
+      width: 12px;
+      height: 12px;
+      box-sizing: border-box;
+      border: 2px solid rgba(15, 23, 42, .18);
+      border-top-color: var(--brand);
+      border-radius: 50%;
+      flex: 0 0 12px;
+    }
+
+    .query-timer[data-running="true"] .timer-indicator {
+      animation: timer-spin .8s linear infinite;
+    }
+
+    .thinking-bubble { display: flex; align-items: center; gap: 10px; }
+
+    @keyframes timer-spin { to { transform: rotate(360deg); } }
+
+    .response-time-note {
+      margin-top: 8px;
+      color: var(--text-muted);
+      font-size: .72rem;
     }
 
     .status-dot {
@@ -121,11 +204,15 @@
 
     /* ---- Chat area ----------------------------------------------------- */
     .chat-area {
-      flex: 1;
+      flex: 1 1 440px;
+      min-height: 0;
       height: 440px;
+      overflow-x: hidden;
       overflow-y: auto;
+      overscroll-behavior: contain;
       padding: 20px 20px 8px;
       scroll-behavior: smooth;
+      scrollbar-gutter: stable;
     }
 
     .chat-area::-webkit-scrollbar { width: 5px; }
@@ -176,6 +263,25 @@
       border-bottom-left-radius: 4px;
       color: var(--text);
     }
+    .comparison-table-wrap {
+      max-width: 100%;
+      overflow-x: auto;
+      margin: 8px 0;
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .86rem;
+      background: rgba(255, 255, 255, .55);
+    }
+    .comparison-table th, .comparison-table td {
+      border: 1px solid rgba(20, 65, 120, .18);
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+      min-width: 130px;
+    }
+    .comparison-table th { background: rgba(20, 90, 170, .10); }
 
     /* Thinking dots */
     .thinking-dots span {
@@ -318,6 +424,14 @@
     .btn-stop-speak:hover { background: #fde68a; }
 
     /* ---- Responsive ---------------------------------------------------- */
+    @media (max-width: 760px) {
+      body { padding: 16px 10px 24px; }
+      .workspace-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 12px; }
+      .conversation-column { min-height: 0; }
+      .avatar-panel { min-height: 250px; }
+      .avatar-video { width: min(100%, 320px); max-height: 320px; }
+      .chat-area { height: 420px; }
+    }
     @media (max-width: 500px) {
       .bubble { max-width: 88%; }
       .btn span { display: none; }
@@ -342,49 +456,61 @@
        MAIN CARD
   ===================================================================== -->
   <div class="card">
+    <div class="workspace-layout">
+      <section class="conversation-column" aria-label="Chat with Insura">
+        <!-- Status bar -->
+        <div class="status-bar" id="statusBar" data-state="idle">
+          <div class="status-dot"></div>
+          <span id="statusText">Ready — click the microphone or type a question</span>
+        </div>
 
-    <!-- Status bar -->
-    <div class="status-bar" id="statusBar" data-state="idle">
-      <div class="status-dot"></div>
-      <span id="statusText">Ready — click the microphone or type a question</span>
+        <!-- Chat messages -->
+        <div class="chat-area" id="chatArea">
+          <!-- Welcome message injected by JS -->
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-row">
+          <div class="wave-container" id="waveContainer">
+            <div class="wave-bar" id="w1"></div>
+            <div class="wave-bar" id="w2"></div>
+            <div class="wave-bar" id="w3"></div>
+            <div class="wave-bar" id="w4"></div>
+            <div class="wave-bar" id="w5"></div>
+          </div>
+          <button class="btn btn-stop-speak" id="btnStopSpeaking" onclick="InsuraAgent.stopSpeaking()">
+            ⏹ Stop speaking
+          </button>
+        </div>
+
+        <!-- Text input -->
+        <div class="input-row">
+          <input
+            type="text"
+            id="textInput"
+            class="text-input"
+            placeholder="Type a question about LIC policies…"
+            autocomplete="off"
+            spellcheck="true"
+            autocorrect="on"
+          />
+          <button class="btn btn-mic" id="btnMic" onclick="InsuraAgent.toggleMic()" title="Toggle microphone">
+            🎤
+          </button>
+          <button class="btn btn-send" id="btnSend" onclick="InsuraAgent.sendText()">
+            <span>Send</span> ➤
+          </button>
+        </div>
+      </section>
+
+      <aside class="avatar-panel" aria-label="Talking avatar">
+        <div class="avatar-toolbar">
+          <span class="avatar-caption" id="avatarStatus">Talking avatar is disconnected</span>
+          <button type="button" class="avatar-connect-btn" id="btnConnectAvatar" onclick="InsuraAgent.toggleAvatar()">Connect avatar</button>
+        </div>
+        <video id="insuraAvatarVideo" class="avatar-video" autoplay playsinline muted aria-label="Insura talking avatar"></video>
+      </aside>
     </div>
-
-    <!-- Chat messages -->
-    <div class="chat-area" id="chatArea">
-      <!-- Welcome message injected by JS -->
-    </div>
-
-    <!-- Controls -->
-    <div class="controls-row">
-      <div class="wave-container" id="waveContainer">
-        <div class="wave-bar" id="w1"></div>
-        <div class="wave-bar" id="w2"></div>
-        <div class="wave-bar" id="w3"></div>
-        <div class="wave-bar" id="w4"></div>
-        <div class="wave-bar" id="w5"></div>
-      </div>
-      <button class="btn btn-stop-speak" id="btnStopSpeaking" onclick="InsuraAgent.stopSpeaking()">
-        ⏹ Stop speaking
-      </button>
-    </div>
-
-    <!-- Text input -->
-    <div class="input-row">
-      <input
-        type="text"
-        id="textInput"
-        class="text-input"
-        placeholder="Type a question about LIC policies…"
-        autocomplete="off"
-      />
-      <button class="btn btn-mic" id="btnMic" onclick="InsuraAgent.toggleMic()" title="Toggle microphone">
-        🎤
-      </button>
-      <button class="btn btn-send" id="btnSend" onclick="InsuraAgent.sendText()">
-        <span>Send</span> ➤
-      </button>
-    </div>
-
   </div><!-- /.card -->
 
 
@@ -400,6 +526,7 @@
 
   const CONFIG = {
     backendUrl:   window.location.origin,
+    avatarUrl:    "http://127.0.0.1:8010",
     recognition: {
       lang:             "en-US",
       interimResults:   false,
@@ -449,6 +576,14 @@
     let _currentAudio   = null;           // current HTMLAudioElement
     let _thinkingBubble = null;           // the animated "..." bubble DOM node
     let _pendingRequest = null;           // AbortController for in-flight fetch
+    let _responseTimerInterval = null;
+    let _responseStartedAt = null;
+    let _currentUtterance = null;
+    let _speechRequestToken = 0;
+    let _preferredFemaleVoiceURI = null;
+    let _avatarPeer = null;
+    let _avatarSessionId = null;
+    let _avatarConnectPromise = null;
 
     // -------------------------------------------------------------------------
     //  Initialise
@@ -611,8 +746,131 @@
     //  Audio playback
     // -------------------------------------------------------------------------
 
-    function _playAudio(filename) {
-      // Cancel any previous audio
+    async function toggleAvatar() {
+      if (_avatarPeer) {
+        _disconnectAvatar();
+        return;
+      }
+      if (_avatarConnectPromise) return _avatarConnectPromise;
+
+      const status = document.getElementById("avatarStatus");
+      const button = document.getElementById("btnConnectAvatar");
+      status.textContent = "Connecting to the avatar service…";
+      button.disabled = true;
+      _avatarConnectPromise = (async () => {
+        try {
+          if (!("RTCPeerConnection" in window)) throw new Error("This browser does not support WebRTC.");
+          const peer = new RTCPeerConnection({ iceServers: [] });
+          _avatarPeer = peer;
+          peer.addTransceiver("audio", { direction: "recvonly" });
+          peer.addTransceiver("video", { direction: "recvonly" });
+          peer.ontrack = event => {
+            const video = document.getElementById("insuraAvatarVideo");
+            video.muted = true; // Insura's answer audio plays once through the existing player.
+            video.srcObject = event.streams?.[0] || new MediaStream([event.track]);
+            video.classList.add("visible");
+            video.play().catch(error => console.warn("[Avatar] video play blocked:", error));
+          };
+          peer.onconnectionstatechange = () => {
+            if (peer.connectionState === "connected") {
+              status.textContent = "Avatar connected — it will lip-sync Insura's spoken answers.";
+              button.textContent = "Disconnect avatar";
+            } else if (["failed", "disconnected"].includes(peer.connectionState)) {
+              status.textContent = "Avatar connection lost. Check that its service is running.";
+            }
+          };
+
+          const offer = await peer.createOffer();
+          await peer.setLocalDescription(offer);
+          if (peer.iceGatheringState !== "complete") {
+            await new Promise(resolve => {
+              const timeout = setTimeout(done, 4000);
+              function done() {
+                clearTimeout(timeout);
+                peer.removeEventListener("icegatheringstatechange", checkIce);
+                resolve();
+              }
+              function checkIce() {
+                if (peer.iceGatheringState === "complete") done();
+              }
+              peer.addEventListener("icegatheringstatechange", checkIce);
+            });
+          }
+
+          const response = await fetch(`${CONFIG.avatarUrl}/offer`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sdp: peer.localDescription.sdp, type: peer.localDescription.type }),
+          });
+          if (!response.ok) throw new Error(`Avatar service returned HTTP ${response.status}.`);
+          const result = await response.json();
+          if (!result.sdp || result.sessionid === undefined) throw new Error(result.msg || "Avatar service returned an invalid session.");
+          _avatarSessionId = Number(result.sessionid);
+          await peer.setRemoteDescription({ type: result.type, sdp: result.sdp });
+          status.textContent = "Avatar session ready — waiting for video.";
+          button.textContent = "Disconnect avatar";
+        } catch (error) {
+          console.error("[Avatar] connection failed:", error);
+          status.textContent = error instanceof TypeError
+            ? "Cannot reach avatar service. Install models\\wav2lip.pth, then run start-avatar.ps1."
+            : `Avatar unavailable: ${error.message}`;
+          _disconnectAvatar(false);
+        } finally {
+          button.disabled = false;
+          _avatarConnectPromise = null;
+        }
+      })();
+      return _avatarConnectPromise;
+    }
+
+    function _disconnectAvatar(updateStatus = true) {
+      if (_avatarPeer) {
+        try { _avatarPeer.close(); } catch (_) {}
+      }
+      _avatarPeer = null;
+      _avatarSessionId = null;
+      const video = document.getElementById("insuraAvatarVideo");
+      if (video) {
+        video.pause();
+        video.srcObject = null;
+        video.classList.remove("visible");
+      }
+      const button = document.getElementById("btnConnectAvatar");
+      if (button) button.textContent = "Connect avatar";
+      if (updateStatus) document.getElementById("avatarStatus").textContent = "Talking avatar is disconnected";
+    }
+
+    async function _sendAudioToAvatar(filename) {
+      if (_avatarSessionId === null) return false;
+      const sessionId = _avatarSessionId;
+      try {
+        const audioResponse = await fetch(`${CONFIG.backendUrl}/audio/${encodeURIComponent(filename)}`);
+        if (!audioResponse.ok) throw new Error(`Could not read Insura audio (HTTP ${audioResponse.status}).`);
+        const audioBlob = await audioResponse.blob();
+        const form = new FormData();
+        form.append("sessionid", String(sessionId));
+        form.append("file", audioBlob, filename);
+        const response = await fetch(`${CONFIG.avatarUrl}/humanaudio`, { method: "POST", body: form });
+        const result = await response.json();
+        if (!response.ok || result.code !== 0) throw new Error(result.msg || `Avatar audio sync returned HTTP ${response.status}.`);
+        return _avatarSessionId === sessionId;
+      } catch (error) {
+        console.error("[Avatar] audio sync failed:", error);
+        document.getElementById("avatarStatus").textContent = "Avatar is connected, but lip-sync failed for this answer.";
+        return false;
+      }
+    }
+
+    function _interruptAvatar() {
+      if (_avatarSessionId === null) return;
+      fetch(`${CONFIG.avatarUrl}/interrupt_talk`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionid: _avatarSessionId }),
+      }).catch(error => console.warn("[Avatar] could not interrupt speech:", error));
+    }
+
+    function _playAudio(filename, fallbackText) {
       _stopAudio();
 
       const url = `${CONFIG.backendUrl}/audio/${filename}`;
@@ -623,30 +881,120 @@
       _setStatus(State.SPEAKING, "🔊 Speaking…");
       _setWave(true);
       document.getElementById("btnStopSpeaking").classList.add("visible");
-      _stopRecognition();   // mic off while speaking
+      _stopRecognition();
 
-      // Capture a reference so stale events from replaced audio are ignored
       const thisAudio = audio;
+      let playStarted = false;
+      const startPlayback = () => {
+        if (_currentAudio !== thisAudio || playStarted) return;
+        playStarted = true;
+        audio.play().catch(err => {
+          if (_currentAudio !== thisAudio) return;
+          console.error("[Audio] play() rejected:", err);
+          _currentAudio = null;
+          _speakFallback(fallbackText);
+        });
+      };
 
       audio.onended = () => {
-        if (_currentAudio !== thisAudio) return;   // already replaced
+        if (_currentAudio !== thisAudio) return;
         _onAudioFinished();
       };
       audio.onerror = (e) => {
         if (_currentAudio !== thisAudio) return;
         console.error("[Audio] Error loading:", url, e);
-        _onAudioFinished();
+        _currentAudio = null;
+        _speakFallback(fallbackText);
       };
 
-      // Set src and attempt play — don't rely on oncanplaythrough
-      // (some browsers/servers skip that event entirely)
       audio.src = url;
+      audio.preload = "auto";
       audio.load();
-      audio.play().catch(err => {
-        if (_currentAudio !== thisAudio) return;
-        console.error("[Audio] play() rejected:", err);
+
+      if (_avatarSessionId !== null) {
+        const sessionId = _avatarSessionId;
+        _sendAudioToAvatar(filename).then(accepted => {
+          // Wav2Lip needs about 0.44s to emit its first speaking frame.
+          // Queue the avatar audio first, then start local playback to align them.
+          const leadMs = accepted && _avatarSessionId === sessionId ? 400 : 0;
+          window.setTimeout(startPlayback, leadMs);
+        });
+      } else {
+        startPlayback();
+      }
+    }
+
+    async function _speakFallback(text) {
+      const speech = window.speechSynthesis;
+      if (!speech || typeof SpeechSynthesisUtterance === "undefined" || !text) {
         _onAudioFinished();
-      });
+        return;
+      }
+      const speechToken = ++_speechRequestToken;
+      speech.cancel();
+      _setState(State.SPEAKING);
+      _setStatus(State.SPEAKING, "🔊 Speaking…");
+      _setWave(true);
+      document.getElementById("btnStopSpeaking").classList.add("visible");
+      _stopRecognition();
+      const cleanText = text
+        .replace(/\n\s*Sources?:[\s\S]*$/i, "")
+        .replace(/^[\s]*[•◦▪*-]\s*/gm, "")
+        .replace(/(?<!\d)\.(?!\d)/g, ",")
+        .replace(/\s+/g, " ")
+        .trim()
+        .replace(/,\s*$/, "");
+      let voices = speech.getVoices();
+      if (!voices.length) {
+        voices = await new Promise(resolve => {
+          let completed = false;
+          const finish = () => {
+            if (completed) return;
+            completed = true;
+            clearTimeout(timeoutId);
+            speech.removeEventListener("voiceschanged", finish);
+            resolve(speech.getVoices());
+          };
+          const timeoutId = setTimeout(finish, 2000);
+          speech.addEventListener("voiceschanged", finish, { once: true });
+        });
+      }
+      if (speechToken !== _speechRequestToken) return;
+
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = "en-IN";
+      utterance.rate = 1.2;
+      const preferredVoice = _preferredFemaleVoiceURI &&
+        voices.find(voice => voice.voiceURI === _preferredFemaleVoiceURI);
+      const femaleIndianVoice = voices.find(voice =>
+        /^en[-_]IN$/i.test(voice.lang) && /aashi|aarti|ananya|kavya|neerja|heera/i.test(voice.name)
+      );
+      const femaleEnglishVoice = voices.find(voice =>
+        /^en[-_]/i.test(voice.lang) && /female|zira|samantha|aria|jenny|heera|neerja|aashi|aarti|ananya|kavya/i.test(voice.name)
+      );
+      const selectedFemaleVoice = preferredVoice || femaleIndianVoice || femaleEnglishVoice;
+      if (!selectedFemaleVoice) {
+        console.error("[Speech] No English female voice is available in this browser.");
+        _currentUtterance = null;
+        _onAudioFinished();
+        return;
+      }
+      _preferredFemaleVoiceURI = selectedFemaleVoice.voiceURI;
+      utterance.voice = selectedFemaleVoice;
+      console.info("[Speech] Browser voice:", selectedFemaleVoice.name);
+      _currentUtterance = utterance;
+      utterance.onend = () => {
+        if (_currentUtterance !== utterance) return;
+        _currentUtterance = null;
+        _onAudioFinished();
+      };
+      utterance.onerror = (event) => {
+        console.warn("[Speech] Browser speech failed:", event.error);
+        if (_currentUtterance !== utterance) return;
+        _currentUtterance = null;
+        _onAudioFinished();
+      };
+      speech.speak(utterance);
     }
 
     function _onAudioFinished() {
@@ -665,6 +1013,9 @@
     }
 
     function _stopAudio() {
+      _speechRequestToken++;
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      _currentUtterance = null;
       if (_currentAudio) {
         try {
           _currentAudio.pause();
@@ -682,6 +1033,7 @@
 
     async function _submitQuery(question) {
       if (!question.trim()) return;
+      _interruptAvatar();
 
       // Cancel any in-flight request
       if (_pendingRequest) {
@@ -700,8 +1052,9 @@
       // Show user bubble
       _appendUserBubble(question);
 
-      // Show animated thinking indicator
+      // Show the thinking animation and timer beside the pending answer.
       _thinkingBubble = _appendThinkingBubble();
+      _startResponseTimer();
 
       const controller = new AbortController();
       _pendingRequest = controller;
@@ -723,39 +1076,37 @@
         });
 
         const data = await response.json();
+        if (_pendingRequest !== controller) return;
         _pendingRequest = null;
+        const responseMs = _stopResponseTimer();
 
         // Replace thinking bubble with actual answer
         _removeThinkingBubble();
         if (!response.ok) {
-          _appendBotBubble(data.answer || "The policy assistant is temporarily unavailable. Please try again.");
+          const errorAnswer = data.answer || "The policy assistant is temporarily unavailable. Please try again.";
+          _appendBotBubble(errorAnswer, responseMs);
           _setStatus(State.IDLE, "⚠️ Assistant unavailable");
-          _setState(State.IDLE);
+          if (data.audio) _playAudio(data.audio, errorAnswer);
+          else _speakFallback(errorAnswer);
           return;
         }
-        _appendBotBubble(data.answer || "Sorry, I didn't get a response.");
-
-        if (data.audio) {
-          _playAudio(data.audio);
-        } else {
-          // No audio — go back to listening / idle
-          if (_micEnabled) {
-            _setState(State.LISTENING);
-            setTimeout(_startRecognition, 300);
-          } else {
-            _setState(State.IDLE);
-            _setStatus(State.IDLE, "Ready");
-          }
-        }
+        const answerText = data.answer || "Sorry, I didn't get a response.";
+        _appendBotBubble(answerText, responseMs);
+        if (data.audio) _playAudio(data.audio, answerText);
+        else _speakFallback(answerText);
 
       } catch (err) {
-        _pendingRequest = null;
-        _removeThinkingBubble();
-
+        const isCurrentRequest = _pendingRequest === controller;
+        if (isCurrentRequest) {
+          _pendingRequest = null;
+          _stopResponseTimer();
+          _removeThinkingBubble();
+        }
         if (err.name === "AbortError") {
           console.log("[Fetch] Request aborted (new question arrived).");
           return;
         }
+        if (!isCurrentRequest) return;
 
         console.error("[Fetch] Error:", err);
         const errMsg = "Sorry, I couldn't reach the server. Please check that the backend is running.";
@@ -774,6 +1125,32 @@
     // -------------------------------------------------------------------------
     //  Public: send text from input box
     // -------------------------------------------------------------------------
+
+    function _startResponseTimer() {
+      _stopResponseTimer();
+      _responseStartedAt = performance.now();
+      const timer = document.getElementById("queryResponseTimer");
+      const timerValue = document.getElementById("queryResponseTimerValue");
+      if (timer) timer.dataset.running = "true";
+      const update = () => {
+        if (timerValue && _responseStartedAt !== null) {
+          timerValue.textContent = `${((performance.now() - _responseStartedAt) / 1000).toFixed(1)}s`;
+        }
+      };
+      update();
+      _responseTimerInterval = setInterval(update, 100);
+    }
+
+    function _stopResponseTimer() {
+      if (_responseTimerInterval) clearInterval(_responseTimerInterval);
+      _responseTimerInterval = null;
+      if (_responseStartedAt === null) return 0;
+      const elapsed = performance.now() - _responseStartedAt;
+      _responseStartedAt = null;
+      const timer = document.getElementById("queryResponseTimer");
+      if (timer) timer.dataset.running = "false";
+      return elapsed;
+    }
 
     function sendText() {
       const question = document.getElementById("textInput").value.trim();
@@ -806,6 +1183,7 @@
 
     function stopSpeaking() {
       _stopAudio();
+      _interruptAvatar();
       if (_micEnabled) {
         _setState(State.LISTENING);
         setTimeout(_startRecognition, 200);
@@ -848,8 +1226,17 @@
       _appendBubble(text, "user", "👤");
     }
 
-    function _appendBotBubble(text) {
-      _appendBubble(text, "bot", "🛡️");
+    function _appendBotBubble(text, responseMs = null) {
+      const row = _appendBubble(text, "bot", "🛡️");
+      if (row && responseMs !== null) {
+        const note = document.createElement("div");
+        note.className = "response-time-note";
+        note.textContent = `Response time: ${(responseMs / 1000).toFixed(1)} seconds`;
+        row.querySelector(".bubble").appendChild(note);
+        const chatArea = document.getElementById("chatArea");
+        requestAnimationFrame(() => chatArea.scrollTop = chatArea.scrollHeight);
+        setTimeout(() => chatArea.scrollTop = chatArea.scrollHeight, 80);
+      }
     }
 
     function _appendBubble(text, who, icon) {
@@ -864,14 +1251,66 @@
 
       const bubble = document.createElement("div");
       bubble.className   = "bubble";
-      // Preserve newlines
+      // Render comparison tables using DOM text nodes; source text cannot inject HTML.
       bubble.style.whiteSpace = "pre-wrap";
-      bubble.textContent = text;
+      const lines = String(text).split(/\r?\n/);
+      const hasMarkdownTable = lines.some((line, index) =>
+        /^\s*\|.*\|\s*$/.test(line) && /^\s*\|\s*:?-{3,}/.test(lines[index + 1] || "")
+      );
+      if (!hasMarkdownTable) {
+        bubble.textContent = text;
+      } else {
+        const fragment = document.createDocumentFragment();
+        const isSeparator = line => /^\s*\|\s*:?-{3,}/.test(line);
+        const cells = line => line.trim().replace(/^\|/, "").replace(/\|$/, "")
+          .split("|").map(cell => cell.trim().replace(/\\\|/g, "|").replace(/\*\*/g, ""));
+        let index = 0;
+        while (index < lines.length) {
+          if (/^\s*\|.*\|\s*$/.test(lines[index]) && isSeparator(lines[index + 1] || "")) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "comparison-table-wrap";
+            const table = document.createElement("table");
+            table.className = "comparison-table";
+            const head = document.createElement("thead");
+            const headRow = document.createElement("tr");
+            cells(lines[index]).forEach(value => {
+              const cell = document.createElement("th");
+              cell.textContent = value;
+              headRow.appendChild(cell);
+            });
+            head.appendChild(headRow);
+            table.appendChild(head);
+            const body = document.createElement("tbody");
+            index += 2;
+            while (index < lines.length && /^\s*\|.*\|\s*$/.test(lines[index])) {
+              const row = document.createElement("tr");
+              cells(lines[index]).forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value;
+                row.appendChild(cell);
+              });
+              body.appendChild(row);
+              index++;
+            }
+            table.appendChild(body);
+            wrapper.appendChild(table);
+            fragment.appendChild(wrapper);
+            if (index < lines.length) fragment.appendChild(document.createElement("br"));
+          } else {
+            fragment.appendChild(document.createTextNode(lines[index]));
+            if (index < lines.length - 1) fragment.appendChild(document.createElement("br"));
+            index++;
+          }
+        }
+        bubble.appendChild(fragment);
+      }
 
       row.appendChild(av);
       row.appendChild(bubble);
       chatArea.appendChild(row);
       chatArea.scrollTop = chatArea.scrollHeight;
+      requestAnimationFrame(() => chatArea.scrollTop = chatArea.scrollHeight);
+      setTimeout(() => chatArea.scrollTop = chatArea.scrollHeight, 80);
       return row;
     }
 
@@ -887,13 +1326,17 @@
       av.textContent = "🛡️";
 
       const bubble = document.createElement("div");
-      bubble.className = "bubble thinking-dots";
-      bubble.innerHTML = "<span></span><span></span><span></span>";
+      bubble.className = "bubble thinking-bubble";
+      bubble.innerHTML = '<div class="thinking-dots" aria-hidden="true"><span></span><span></span><span></span></div>' +
+        '<span id="queryResponseTimer" class="query-timer" data-running="false" aria-label="Response timer">' +
+        '<span class="timer-indicator" aria-hidden="true"></span><span id="queryResponseTimerValue">0.0s</span></span>';
 
       row.appendChild(av);
       row.appendChild(bubble);
       chatArea.appendChild(row);
       chatArea.scrollTop = chatArea.scrollHeight;
+      requestAnimationFrame(() => chatArea.scrollTop = chatArea.scrollHeight);
+      setTimeout(() => chatArea.scrollTop = chatArea.scrollHeight, 80);
       return row;
     }
 
@@ -921,7 +1364,7 @@
     //  Public interface
     // -------------------------------------------------------------------------
 
-    return { init, toggleMic, sendText, stopSpeaking };
+    return { init, toggleMic, sendText, stopSpeaking, toggleAvatar };
 
   })(); // InsuraAgent IIFE
 
@@ -932,3 +1375,10 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+

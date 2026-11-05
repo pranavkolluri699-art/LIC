@@ -1,0 +1,42 @@
+# Local Insura integration. Only listen on this computer; Insura supplies grounded answers and audio.
+app:
+  listenhost: 127.0.0.1
+  listenport: 8010
+  max_session: 1
+  ssl: false
+  web:
+    host: 127.0.0.1
+    port: 3000
+
+model:
+  type: wav2lip
+  avatar_id: wav2lip_avatar1
+  batch_size: 4
+  model_path: ./models
+
+tts:
+  type: edgetts
+  ref_file: en-IN-NeerjaNeural
+
+asr:
+  mode: browser
+  type: whisper
+  model_size: base
+  language: en
+  device: cuda
+
+# The Insura page calls /humanaudio; Linly's independent LLM is not used.
+llm:
+  api_key: ""
+
+audio:
+  fps: 50
+  sample_rate: 16000
+
+video:
+  width: 450
+  height: 450
+  fps: 25
+
+custom_video:
+  config_path: ""
